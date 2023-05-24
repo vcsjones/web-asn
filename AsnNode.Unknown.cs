@@ -3,45 +3,37 @@ using System.Text;
 
 namespace WebAsn;
 
-public partial class AsnNode
-{
-    public UnknownAsnNode Unknown()
-    {
+public partial class AsnNode {
+    public UnknownAsnNode Unknown() {
         return new UnknownAsnNode(Tag, Context, Reader);
     }
 }
 
-public sealed class UnknownAsnNode : AsnNode
-{
+public sealed class UnknownAsnNode : AsnNode {
     private static readonly Encoding UTF8Throwing = new UTF8Encoding(false, true);
 
     private readonly AsnNode[] _children;
 
-    public UnknownAsnNode(Asn1Tag tag, AsnWalkContext context, AsnReader reader) : base(tag, context, reader)
-    {
+    public UnknownAsnNode(Asn1Tag tag, AsnWalkContext context, AsnReader reader) : base(tag, context, reader) {
         // We need to advance the reader or we'll loop forever.
         reader.ReadEncodedValue();
 
         AsnWalker walker = new(context, Contents);
 
-        try
-        {
+        try {
             // We want to up-front validate all of the contents so that we can back-out
             // if it turns out we can't walk it.
             _children = walker.Walk().ToArray();
         }
-        catch
-        {
+        catch {
             _children = Array.Empty<AsnNode>();
         }
     }
 
     public override IEnumerable<AsnNode> GetChildren() => _children;
 
-    public override string? Display
-    {
-        get
-        {
+    public override string? Display {
+        get {
             // If we auto-decoded some child elements, then we don't want to display
             // a value.
             if (_children.Length > 0)
@@ -78,16 +70,12 @@ public sealed class UnknownAsnNode : AsnNode
         }
     }
 
-    public override string Name
-    {
-        get
-        {
-            if (Tag.TagClass == TagClass.ContextSpecific)
-            {
+    public override string Name {
+        get {
+            if (Tag.TagClass == TagClass.ContextSpecific) {
                 return $"[{Tag.TagValue}]";
             }
-            else if (Tag.TagClass == TagClass.Application)
-            {
+            else if (Tag.TagClass == TagClass.Application) {
                 return $"{{Tag.TagValue}}";
             }
 

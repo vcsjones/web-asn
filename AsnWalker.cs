@@ -2,52 +2,39 @@ using System.Formats.Asn1;
 
 namespace WebAsn;
 
-public sealed class AsnWalker
-{
+public sealed class AsnWalker {
     private readonly AsnWalkContext _context;
     private readonly AsnReader _reader;
-    private static readonly AsnReaderOptions _options = new()
-    {
-        SkipSetSortOrderVerification = true
-    };
+    private static readonly AsnReaderOptions _options = new() { SkipSetSortOrderVerification = true };
 
-    public AsnWalker(AsnWalkContext context, ReadOnlyMemory<byte> asn)
-    {
+    public AsnWalker(AsnWalkContext context, ReadOnlyMemory<byte> asn) {
         _context = context;
         _reader = new(asn, AsnEncodingRules.BER, _options);
     }
 
-    public IEnumerable<AsnNode> Walk()
-    {
+    public IEnumerable<AsnNode> Walk() {
 
-        while (_reader.HasData)
-        {
+        while (_reader.HasData) {
             Asn1Tag tag = _reader.PeekTag();
 
             AsnNode basicNode = new(tag, _context, _reader);
 
-            if (tag == Asn1Tag.Sequence)
-            {
+            if (tag == Asn1Tag.Sequence) {
                 yield return basicNode.Sequence();
             }
-            else if (tag == Asn1Tag.SetOf)
-            {
+            else if (tag == Asn1Tag.SetOf) {
                 yield return basicNode.Set();
             }
-            else if (tag == Asn1Tag.Integer)
-            {
+            else if (tag == Asn1Tag.Integer) {
                 yield return basicNode.Integer();
             }
-            else if (tag == Asn1Tag.ObjectIdentifier)
-            {
+            else if (tag == Asn1Tag.ObjectIdentifier) {
                 yield return basicNode.ObjectIdentifier();
             }
-            else if (tag == Asn1Tag.UtcTime)
-            {
+            else if (tag == Asn1Tag.UtcTime) {
                 yield return basicNode.UtcTime();
             }
-            else if (tag == Asn1Tag.GeneralizedTime)
-            {
+            else if (tag == Asn1Tag.GeneralizedTime) {
                 yield return basicNode.GeneralizedTime();
             }
             else if (
@@ -57,28 +44,22 @@ public sealed class AsnWalker
                 tag == new Asn1Tag(UniversalTagNumber.GeneralString) ||
                 tag == new Asn1Tag(UniversalTagNumber.NumericString) ||
                 tag == new Asn1Tag(UniversalTagNumber.VisibleString) ||
-                tag == new Asn1Tag(UniversalTagNumber.UTF8String))
-            {
-                yield return basicNode.String();
+                tag == new Asn1Tag(UniversalTagNumber.UTF8String)) {
+                    yield return basicNode.String();
             }
-            else if (tag == Asn1Tag.Boolean)
-            {
+            else if (tag == Asn1Tag.Boolean) {
                 yield return basicNode.Boolean();
             }
-            else if (tag == Asn1Tag.PrimitiveOctetString)
-            {
+            else if (tag == Asn1Tag.PrimitiveOctetString) {
                 yield return basicNode.PrimitiveOctetString();
             }
-            else if (tag == Asn1Tag.PrimitiveBitString)
-            {
+            else if (tag == Asn1Tag.PrimitiveBitString) {
                 yield return basicNode.PrimitiveBitString();
             }
-            else if (tag == Asn1Tag.Enumerated)
-            {
+            else if (tag == Asn1Tag.Enumerated) {
                 yield return basicNode.Enumerated();
             }
-            else
-            {
+            else {
                 yield return basicNode.Unknown();
             }
         }

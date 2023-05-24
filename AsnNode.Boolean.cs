@@ -2,12 +2,9 @@ using System.Formats.Asn1;
 
 namespace WebAsn;
 
-public partial class AsnNode
-{
-    public BooleanAsnNode Boolean()
-    {
-        if (Tag != Asn1Tag.Boolean)
-        {
+public partial class AsnNode {
+    public BooleanAsnNode Boolean() {
+        if (Tag != Asn1Tag.Boolean) {
             throw new InvalidOperationException($"ASN.1 tag {Tag.TagValue} is invalid.");
         }
 
@@ -15,12 +12,10 @@ public partial class AsnNode
     }
 }
 
-public sealed class BooleanAsnNode : AsnNode
-{
+public sealed class BooleanAsnNode : AsnNode {
     private readonly bool _value;
 
-    public BooleanAsnNode(Asn1Tag tag, AsnWalkContext context, AsnReader reader) : base(tag, context, reader)
-    {
+    public BooleanAsnNode(Asn1Tag tag, AsnWalkContext context, AsnReader reader) : base(tag, context, reader) {
         _value = reader.ReadBoolean(tag);
     }
 
