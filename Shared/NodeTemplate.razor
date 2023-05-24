@@ -1,0 +1,45 @@
+@namespace WebAsn
+
+<div>
+@if(Node is not null) {
+    bool hasChildren = Node.GetChildren().Any();
+
+    <div class="node-shell toggle-shell">
+        <div class="node">
+            <div
+                @onclick="@(hasChildren ? Toggle : null!)"
+                class="node-name @(HideChildren ? "node-collapsed" : "") @(Node.Synthetic ? "node-synthetic" : "node-standard") @(hasChildren ? "node-parent" : "")">
+                @Node.Name
+            </div>
+
+            <div class="node-display">@Node.Display</div>
+            <div class="node-adornments">
+                @foreach ((string Name, string Value) in Node.GetAdorningAttributes()) {
+                    <div class="node-adornment">
+                        <span class="node-adornment-name">@Name</span>:
+                        <span class="node-adornment-value">@Value</span>
+                    </div>
+                }
+            </div>
+        </div>
+        @if (!HideChildren) {
+            <div class="node-children">
+                @foreach (AsnNode child in Node.GetChildren()) {
+                    <NodeTemplate Node="child" />
+                }
+            </div>
+        }
+    </div>
+}
+</div>
+
+@code {
+    [Parameter]
+    public AsnNode? Node { get; set; }
+    public bool HideChildren { get; set; }
+
+    public void Toggle()
+    {
+        HideChildren = !HideChildren;
+    }
+}

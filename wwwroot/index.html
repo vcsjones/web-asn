@@ -1,19 +1,15 @@
+<!DOCTYPE html>
 <html lang="en">
- <head>
-  <meta charset="UTF-8" />
- </head>
- <body></body>
- <script src="wwwroot/_framework/blazor.webassembly.js" autostart="false"></script>
- <script>
-  window.onload = async function () {
-    await Blazor.start();
-    const r = await DotNet.invokeMethodAsync(
-    'web-asn',//Assembly name
-    'Add',//the method decorated with [JSInvokable]
-    666,//some arguments
-    333
-   );
-   alert(r);
-  };
- </script>
+<head>
+    <meta charset="utf-8" />
+    <title>web-asn</title>
+    <link href="css/app.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="_framework/blazor.webassembly.js"></script>
+
+</body>
+
 </html>
