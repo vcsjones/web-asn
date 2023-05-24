@@ -13,7 +13,6 @@ public partial class AsnNode {
 }
 
 public sealed class SequenceAsnNode : AsnNode {
-
     public SequenceAsnNode(Asn1Tag tag, AsnWalkContext context, AsnReader reader) : base(tag, context, reader) {
         reader.ReadSequence(tag);
     }

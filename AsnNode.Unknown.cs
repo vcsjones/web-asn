@@ -36,22 +36,19 @@ public sealed class UnknownAsnNode : AsnNode {
         get {
             // If we auto-decoded some child elements, then we don't want to display
             // a value.
-            if (_children.Length > 0)
-            {
+            if (_children.Length > 0) {
                 return base.Display;
             }
 
             // If it's universal we should be handling them already. This would
             // mean there is a universal tag we don't know how to display.
-            if (Tag.TagClass == TagClass.Universal)
-            {
+            if (Tag.TagClass == TagClass.Universal) {
                 return base.Display;
             }
 
             string ascii = Encoding.ASCII.GetString(Contents.Span);
 
-            try
-            {
+            try {
                 string utf8 = UTF8Throwing.GetString(Contents.Span);
 
                 // We only want text if they appear to be ASCII. If the UTF8
@@ -62,8 +59,7 @@ public sealed class UnknownAsnNode : AsnNode {
                     return utf8;
                 }
             }
-            catch (DecoderFallbackException)
-            {
+            catch (DecoderFallbackException) {
             }
 
             return Convert.ToHexString(Contents.Span);

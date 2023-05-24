@@ -13,8 +13,7 @@ public partial class AsnNode {
     }
 }
 
-public sealed class IntegerAsnNode : AsnNode
-{
+public sealed class IntegerAsnNode : AsnNode {
     private readonly BigInteger _value;
 
     public IntegerAsnNode(Asn1Tag tag, AsnWalkContext context, AsnReader reader) : base(tag, context, reader) {
