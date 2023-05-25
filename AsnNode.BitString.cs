@@ -33,7 +33,8 @@ public sealed class PrimitiveBitStringAsnNode : AsnNode {
             return Array.Empty<AsnNode>();
         }
 
-        AsnWalker walker = new(Context with { Synthetic = true }, Contents);
+        // Slice off the unused bit count byte.
+        AsnWalker walker = new(Context with { Synthetic = true }, Contents.Slice(1));
 
         try {
             // We want to up-front validate all of the contents so that we can back-out
