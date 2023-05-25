@@ -242,17 +242,32 @@ RzBFAiEA8QQwLqu0KOzI5xzi449svthIqOmitdXaGZM+SFyDzHECIAy7QKC3ubLg
 SJIGIvsob9FGlfJM9lC9qkC4hfhMNLu5";
     private AsnNode? RootNode { get; set; }
 
-    private void Decode()
-    {
-        byte[] decoded;
+    private void Decode() {
+        byte[]? decoded = null;
 
-        try
-        {
+        try {
             decoded = Convert.FromHexString(Contents);
         }
-        catch
-        {
-            decoded = Convert.FromBase64String(Contents);
+        catch {
+        }
+
+        if (decoded is null) {
+            try {
+                decoded = Convert.FromBase64String(Contents);
+            }
+            catch {
+            }
+        }
+
+        if (decoded is null) {
+            if (PemEncoding.TryFind(Contents, out PemFields fields)) {
+                decoded = Convert.FromBase64String(Contents[fields.Base64Data]);
+            }
+        }
+
+        if (decoded is null) {
+            RootNode = null;
+            return;
         }
 
         AsnWalkContext context = new(decoded);

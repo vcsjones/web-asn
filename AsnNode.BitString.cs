@@ -28,6 +28,24 @@ public sealed class PrimitiveBitStringAsnNode : AsnNode {
         return attributes;
     }
 
+    public override IEnumerable<AsnNode> GetChildren() {
+        if (_unusedBits != 0 || _value.Length == 0) {
+            return Array.Empty<AsnNode>();
+        }
+
+        AsnWalker walker = new(Context with { Synthetic = true }, Contents);
+
+        try {
+            // We want to up-front validate all of the contents so that we can back-out
+            // if it turns out we can't walk it.
+            return walker.Walk().ToArray();
+        }
+        catch {
+            return Array.Empty<AsnNode>();
+        }
+
+    }
+
     public override string Display {
         get {
             int totalBits = _value.Length * 8 - _unusedBits;
