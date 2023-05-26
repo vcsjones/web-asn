@@ -10,9 +10,18 @@
     color: #999;
     display: inline-block;
 }
+
+.node-adornment-value {
+    max-width: 400pt;
+    word-wrap: break-word;
+    display: inline-block;
+    vertical-align: top;
+}
+
 .node div {
     display: inline-block;
 }
+
 .node div:not(:last-child) {
     margin-right: 5pt;
 }
@@ -33,7 +42,7 @@
 .node-display {
     max-width: 400pt;
     overflow: hidden;
-    vertical-align: bottom;
+    vertical-align: top;
     text-overflow: ellipsis;
 }
 
