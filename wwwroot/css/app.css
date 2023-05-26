@@ -1,3 +1,36 @@
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #111;
+        color: #fdfdfd;
+    }
+
+    textarea {
+        background-color: #222;
+        color: #fdfdfd;
+    }
+
+    button {
+        background-color: cornflowerblue;
+        border: 2px solid #fdfdfd;
+        color: #fdfdfd;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    button {
+        background-color: #DDD;
+        border: 2px solid black;
+        color: black;
+    }
+}
+
+button {
+    font-size: 16px;
+    padding: 10pt 20pt;
+    cursor: pointer;
+    border-radius: 7pt;
+}
+
 .asn-tree {
     font-family: monospace;
 }
@@ -21,11 +54,10 @@
 .node-opener {
     position: relative;
     left: -5pt;
-    top: -3pt;
-
+    top: -1.5pt;
+    font-size: 6pt;
 }
 .node-opener a:link, .node-opener a:visited {
-    color: blue;
     text-decoration: none;
 }
 
