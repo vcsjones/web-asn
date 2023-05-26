@@ -18,11 +18,22 @@
     vertical-align: top;
 }
 
+.node-opener {
+    position: relative;
+    left: -5pt;
+    top: -3pt;
+
+}
+.node-opener a:link, .node-opener a:visited {
+    color: blue;
+    text-decoration: none;
+}
+
 .node div {
     display: inline-block;
 }
 
-.node div:not(:last-child) {
+.node div:not(:last-child):not(:first-child) {
     margin-right: 5pt;
 }
 

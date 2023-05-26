@@ -1,4 +1,4 @@
-﻿
+﻿@inject NavigationManager NavigationManager
 <div class="document-content">
     <div>
         <textarea id="contents" name="contents" @bind="Contents">
@@ -16,11 +16,20 @@
     private string Contents { get; set; } = @"0C0C48656C6C6F20576F726C6421";
     private AsnNode? RootNode { get; set; }
 
+    protected override void OnInitialized() {
+        Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (uri.Query.StartsWith("?asn=", StringComparison.Ordinal)) {
+            Contents = uri.Query.Substring(5);
+            Decode();
+        }
+    }
+
     private void Decode() {
         byte[]? decoded = null;
 
         try {
-            decoded = Convert.FromHexString(Contents);
+            string cleaned = Contents.Replace(" ", "").ReplaceLineEndings("");
+            decoded = Convert.FromHexString(cleaned);
         }
         catch {
         }
@@ -44,9 +53,14 @@
             return;
         }
 
-        AsnWalkContext context = new(decoded);
-        AsnWalker walker = new(context, decoded);
-        AsnNode node = walker.Walk().First();
-        RootNode = node;
+        try {
+            AsnWalkContext context = new(decoded);
+            AsnWalker walker = new(context, decoded);
+            AsnNode node = walker.Walk().First();
+            RootNode = node;
+        }
+        catch {
+            RootNode = null;
+        }
     }
 }

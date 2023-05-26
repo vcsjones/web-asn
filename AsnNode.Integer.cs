@@ -29,7 +29,8 @@ public sealed class IntegerAsnNode : AsnNode {
         // it's probably a serial number or something likely to be "stringified" in
         // hex. However for small integers, we don't need to print things like
         // certificate versions (0-2) in hex as well.
-        if (_value > int.MaxValue) {
+        // We also do an arbitrary cut off of 4096 bits. Anything bigger is too big to annotate.
+        if (_value > int.MaxValue && _value.GetBitLength() <= 4096) {
             attributes.Add(("Hex", $"0x{_value:X2}"));
         }
 

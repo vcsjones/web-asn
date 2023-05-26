@@ -1,3 +1,4 @@
+@inject IJSRuntime JS
 @namespace WebAsn
 
 <div>
@@ -11,7 +12,9 @@
                 class="node-name @(HideChildren ? "node-collapsed" : "") @(Node.Synthetic ? "node-synthetic" : "node-standard") @(hasChildren ? "node-parent" : "")">
                 @Node.Name
             </div>
-
+            <div class="node-opener">
+                <a href="#" @onclick="@PopOut">&#x2197;</a>
+            </div>
             <div class="node-display">@Node.Display</div>
             <div class="node-adornments">
                 @foreach ((string Name, string Value) in Node.GetAdorningAttributes()) {
@@ -41,5 +44,17 @@
     public void Toggle()
     {
         HideChildren = !HideChildren;
+    }
+
+    public async Task PopOut()
+    {
+        if (Node is null)
+        {
+            // This should not happen, but make the nullable annotation analysis happy.
+            return;
+        }
+
+        string base64 = Convert.ToBase64String(Node.Raw.Span);
+        await JS.InvokeVoidAsync("open", "?asn=" + base64, "_blank");
     }
 }
