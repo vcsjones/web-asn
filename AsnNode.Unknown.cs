@@ -18,7 +18,7 @@ public sealed class UnknownAsnNode : AsnNode {
         // We need to advance the reader or we'll loop forever.
         reader.ReadEncodedValue();
 
-        AsnWalker walker = new(context with { Synthetic = !tag.IsConstructed }, Contents);
+        AsnWalker walker = new(context with { Synthetic = context.Synthetic || !tag.IsConstructed }, Contents);
 
         try {
             // We want to up-front validate all of the contents so that we can back-out

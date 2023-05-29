@@ -5,7 +5,7 @@
 @if(Node is not null) {
     bool hasChildren = Node.GetChildren().Any();
 
-    <div class="node-shell toggle-shell">
+    <div class="node-shell toggle-shell @("l" + ((Level % 3) + 1))">
         <div class="node">
             <div
                 @onclick="@(hasChildren ? Toggle : null!)"
@@ -13,7 +13,9 @@
                 @Node.Name
             </div>
             <div class="node-opener">
-                <a href="#" @onclick="@PopOut">&#x1F517;</a>
+                @if (Level > 0) {
+                    <a href="#" @onclick="@PopOut">&#x1F517;</a>
+                }
             </div>
             <div class="node-display">@Node.Display</div>
             <div class="node-adornments">
@@ -28,7 +30,7 @@
         @if (!HideChildren) {
             <div class="node-children">
                 @foreach (AsnNode child in Node.GetChildren()) {
-                    <NodeTemplate Node="child" />
+                    <NodeTemplate Node="child" Level="@(Level + 1)" />
                 }
             </div>
         }
@@ -39,17 +41,18 @@
 @code {
     [Parameter]
     public AsnNode? Node { get; set; }
+
+    [Parameter]
+    public int Level { get; set; } = 0;
+
     public bool HideChildren { get; set; }
 
-    public void Toggle()
-    {
+    public void Toggle() {
         HideChildren = !HideChildren;
     }
 
-    public async Task PopOut()
-    {
-        if (Node is null)
-        {
+    public async Task PopOut() {
+        if (Node is null) {
             // This should not happen, but make the nullable annotation analysis happy.
             return;
         }

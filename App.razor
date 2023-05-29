@@ -1,6 +1,7 @@
 ﻿@inject NavigationManager NavigationManager
 <div class="document-content">
     <div>
+        <div id="errors">@Errors</div>
         <textarea id="contents" name="contents" @bind="Contents">
         </textarea>
         <button @onclick="Decode">Decode</button>
@@ -15,6 +16,7 @@
 @code {
     private string Contents { get; set; } = @"0C0C48656C6C6F20576F726C6421";
     private AsnNode? RootNode { get; set; }
+    private string? Errors { get; set; }
 
     protected override void OnInitialized() {
         Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
@@ -25,6 +27,7 @@
     }
 
     private void Decode() {
+        Errors = null;
         byte[]? decoded = null;
 
         try {
@@ -49,6 +52,7 @@
         }
 
         if (decoded is null) {
+            Errors = "Content could not be decoded as hex or base64.";
             RootNode = null;
             return;
         }
@@ -59,8 +63,9 @@
             AsnNode node = walker.Walk().First();
             RootNode = node;
         }
-        catch {
+        catch (Exception e) {
             RootNode = null;
+            Errors = e.Message;
         }
     }
 }
