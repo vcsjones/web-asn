@@ -60,6 +60,9 @@ public sealed class AsnWalker {
             else if (tag == Asn1Tag.Enumerated) {
                 yield return basicNode.Enumerated();
             }
+            else if (tag == Asn1Tag.Null) {
+                yield return basicNode.Null();
+            }
             else {
                 yield return basicNode.Unknown();
             }
