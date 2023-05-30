@@ -44,6 +44,7 @@ public sealed class AsnWalker {
                 tag == new Asn1Tag(UniversalTagNumber.GeneralString) ||
                 tag == new Asn1Tag(UniversalTagNumber.NumericString) ||
                 tag == new Asn1Tag(UniversalTagNumber.VisibleString) ||
+                tag == new Asn1Tag(UniversalTagNumber.TeletexString) ||
                 tag == new Asn1Tag(UniversalTagNumber.UTF8String)) {
                     yield return basicNode.String();
             }
