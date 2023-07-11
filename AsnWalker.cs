@@ -12,6 +12,12 @@ public sealed class AsnWalker {
         _reader = new(asn, AsnEncodingRules.BER, _options);
     }
 
+    public AsnWalker(AsnWalkContext context, AsnReader reader) {
+        _context = context;
+        _reader = reader;
+    }
+
+
     public IEnumerable<AsnNode> Walk() {
 
         while (_reader.HasData) {

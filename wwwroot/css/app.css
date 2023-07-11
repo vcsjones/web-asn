@@ -132,4 +132,9 @@ button {
     height: 300pt;
 }
 
-
+#footer {
+    position: fixed;
+    bottom: 15pt;
+    right: 15pt;
+    font-family: monospace;
+}

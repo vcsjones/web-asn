@@ -13,12 +13,14 @@ public partial class AsnNode {
 }
 
 public sealed class SequenceAsnNode : AsnNode {
+    private readonly AsnReader _sequence;
+
     public SequenceAsnNode(Asn1Tag tag, AsnWalkContext context, AsnReader reader) : base(tag, context, reader) {
-        reader.ReadSequence(tag);
+        _sequence = reader.ReadSequence(tag);
     }
 
     public override IEnumerable<AsnNode> GetChildren() {
-        AsnWalker walker = new(Context, Contents);
+        AsnWalker walker = new(Context, _sequence.Clone());
         return walker.Walk();
     }
 
