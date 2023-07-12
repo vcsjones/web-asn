@@ -58,6 +58,6 @@
         }
 
         string base64 = Convert.ToBase64String(Node.Raw.Span);
-        await JS.InvokeVoidAsync("open", "?asn=" + base64, "_blank");
+        await JS.InvokeVoidAsync("open", "#" + base64, "_blank");
     }
 }

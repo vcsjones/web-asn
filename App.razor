@@ -28,6 +28,10 @@
             Contents = uri.Query.Substring(5);
             Decode();
         }
+        else if (uri.Fragment.Length > 1 && uri.Fragment[0] == '#') {
+            Contents = uri.Fragment.Substring(1);
+            Decode();
+        }
     }
 
     private void Decode() {
