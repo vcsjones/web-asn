@@ -70,7 +70,13 @@ public sealed class AsnWalker {
                 yield return basicNode.Null();
             }
             else {
-                yield return basicNode.Unknown();
+                // We don't want EoC tags to be visible or synthetically decode them, however they must be consumed.
+                // So consume the node as unknown, but only yield it if it is not EoC.
+                AsnNode node = basicNode.Unknown();
+
+                if (tag != new Asn1Tag(UniversalTagNumber.EndOfContents)) {
+                    yield return node;
+                }
             }
         }
     }
