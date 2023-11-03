@@ -10,8 +10,6 @@ public partial class AsnNode {
 }
 
 public sealed class UnknownAsnNode : AsnNode {
-    private static readonly Encoding UTF8Throwing = new UTF8Encoding(false, true);
-
     private readonly AsnNode[] _children;
 
     public UnknownAsnNode(Asn1Tag tag, AsnWalkContext context, AsnReader reader) : base(tag, context, reader) {
@@ -19,15 +17,7 @@ public sealed class UnknownAsnNode : AsnNode {
         reader.ReadEncodedValue();
 
         AsnWalker walker = new(context with { Synthetic = context.Synthetic || !tag.IsConstructed }, Contents);
-
-        try {
-            // We want to up-front validate all of the contents so that we can back-out
-            // if it turns out we can't walk it.
-            _children = walker.Walk().ToArray();
-        }
-        catch {
-            _children = Array.Empty<AsnNode>();
-        }
+        _children = DecodeChildren(walker);
     }
 
     public override IEnumerable<AsnNode> GetChildren() => _children;
@@ -46,23 +36,23 @@ public sealed class UnknownAsnNode : AsnNode {
                 return base.Display;
             }
 
-            string ascii = Encoding.ASCII.GetString(Contents.Span);
+            bool valid = true;
+            ReadOnlySpan<byte> contents = Contents.Span;
 
-            try {
-                string utf8 = UTF8Throwing.GetString(Contents.Span);
+            for (int i = 0; i < contents.Length && valid; i++) {
+                byte c = contents[i];
 
-                // We only want text if they appear to be ASCII. If the UTF8
-                // and ASCII encoding disagree on the decoded text, then substitution
-                // took place and we don't want the string.
-                if (utf8 == ascii)
-                {
-                    return utf8;
+                if (c is > 0x7E or (< 0x20 and not 0x0A and not 0x0C)) {
+                    valid = false;
                 }
             }
-            catch (DecoderFallbackException) {
-            }
 
-            return Convert.ToHexString(Contents.Span);
+            if (valid) {
+                return Encoding.ASCII.GetString(contents);
+            }
+            else {
+                return Convert.ToHexString(contents);
+            }
         }
     }
 
@@ -72,7 +62,7 @@ public sealed class UnknownAsnNode : AsnNode {
                 return $"[{Tag.TagValue}]";
             }
             else if (Tag.TagClass == TagClass.Application) {
-                return $"{{Tag.TagValue}}";
+                return $"{{{Tag.TagValue}}}";
             }
 
             return Tag.ToString();

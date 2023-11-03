@@ -23,15 +23,6 @@ public sealed class PrimitiveOctetStringAsnNode : AsnNode {
 
     public override IEnumerable<AsnNode> GetChildren() {
         AsnWalker walker = new(Context with { Synthetic = true }, Contents);
-
-        try {
-            // We want to up-front validate all of the contents so that we can back-out
-            // if it turns out we can't walk it.
-            return walker.Walk().ToArray();
-        }
-        catch {
-            return Array.Empty<AsnNode>();
-        }
-
+        return DecodeChildren(walker);
     }
 }
