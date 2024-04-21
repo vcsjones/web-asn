@@ -31,6 +31,8 @@ jobs:
         oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
         tags: tag:ci
     - name: Copy To Production
-      run: ssh -o "StrictHostKeyChecking no" ubuntu@vcsjones-dev
+      run: |
+        echo "vcsjones-dev ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHEVhpLvozMlKqO8s5pffq0GBV5Ju32kECNzLyU2r4Nv" >> ~/.ssh/known_hosts
+        ssh ubuntu@vcsjones-dev
 
 
