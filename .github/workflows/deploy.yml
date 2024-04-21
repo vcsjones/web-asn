@@ -1,12 +1,20 @@
+
+name: Deployment
+concurrency: live
+
 on:
   workflow_dispatch:
   push:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: live
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-dotnet@v4
@@ -14,3 +22,4 @@ jobs:
         dotnet-version: '9.x'
     - run: dotnet workload restore
     - run: dotnet publish -c release
+
