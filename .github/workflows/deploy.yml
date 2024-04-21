@@ -12,4 +12,5 @@ jobs:
     - uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.x'
+    - run: dotnet workload restore
     - run: dotnet publish -c release
