@@ -32,6 +32,7 @@ jobs:
         tags: tag:ci
     - name: Copy To Production
       run: |
+        mkdir -p ~/.ssh
         echo "vcsjones-dev ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHEVhpLvozMlKqO8s5pffq0GBV5Ju32kECNzLyU2r4Nv" >> ~/.ssh/known_hosts
         ssh ubuntu@vcsjones-dev
 
