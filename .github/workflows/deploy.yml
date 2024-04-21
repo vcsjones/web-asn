@@ -23,7 +23,7 @@ jobs:
       with:
         dotnet-version: '9.x'
     - name: Build
-      run: dotnet workload restore && dotnet publish -c release
+      run: dotnet workload restore && dotnet publish web-asn.csproj -c release --output bin/publish
     - name: Tailscale
       uses: tailscale/github-action@v2
       with:
@@ -34,6 +34,6 @@ jobs:
       run: |
         mkdir -p ~/.ssh
         echo "vcsjones-dev ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHEVhpLvozMlKqO8s5pffq0GBV5Ju32kECNzLyU2r4Nv" >> ~/.ssh/known_hosts
-        ssh ubuntu@vcsjones-dev
+        scp -r bin/publish/wwwroot/* deployer@vcsjones-dev:/var/wwwroot2/asn
 
 
