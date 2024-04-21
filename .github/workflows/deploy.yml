@@ -16,10 +16,20 @@ jobs:
     runs-on: ubuntu-latest
     environment: live
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-dotnet@v4
+    - name: Build
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+      - run: dotnet workload restore
+      - run: dotnet publish -c release
+    - name: Tailscale
+      uses: tailscale/github-action@v2
       with:
-        dotnet-version: '9.x'
-    - run: dotnet workload restore
-    - run: dotnet publish -c release
+        oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+        oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+        tags: tag:ci
+    -name: Copy To Production
+      - run: ssh -o "StrictHostKeyChecking no"
+
 
