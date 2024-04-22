@@ -23,6 +23,14 @@ public sealed class PrimitiveOctetStringAsnNode : AsnNode {
 
     public override IEnumerable<AsnNode> GetChildren() {
         AsnWalker walker = new(Context with { Synthetic = true }, Contents);
-        return DecodeChildren(walker);
+        AsnNode? node = SyntheticDecode(walker);
+
+        // Only consider it a successful synethetic decode if the node's raw content fully align with the Contents of
+        // this octet string.
+        if (node is not null && node.Raw.Span == Contents.Span) {
+            return [node];
+        }
+
+        return [];
     }
 }

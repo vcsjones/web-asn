@@ -39,6 +39,20 @@ public partial class AsnNode {
         Context = context;
     }
 
+    protected static AsnNode? SyntheticDecode(AsnWalker walker) {
+        try {
+            AsnNode[] children = walker.Walk().ToArray();
+
+            return children switch {
+                [AsnNode node] => node,
+                _ => null,
+            };
+        }
+        catch {
+            return null;
+        }
+    }
+
     protected static AsnNode[] DecodeChildren(AsnWalker walker) {
         try {
             // We want to up-front validate all of the contents so that we can back-out

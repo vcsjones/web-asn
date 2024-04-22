@@ -30,12 +30,21 @@ public sealed class PrimitiveBitStringAsnNode : AsnNode {
 
     public override IEnumerable<AsnNode> GetChildren() {
         if (_unusedBits != 0 || _value.Length == 0) {
-            return Array.Empty<AsnNode>();
+            return [];
         }
 
         // Slice off the unused bit count byte.
-        AsnWalker walker = new(Context with { Synthetic = true }, Contents[1..]);
-        return DecodeChildren(walker);
+        ReadOnlyMemory<byte> contents = Contents[1..];
+        AsnWalker walker = new(Context with { Synthetic = true }, contents);
+        AsnNode? node = SyntheticDecode(walker);
+
+        // Only consider it a successful synethetic decode if the node's raw content fully align with the contents of
+        // this bit array, excluding the unused bit count bit.
+        if (node is not null && node.Raw.Span == contents.Span) {
+            return [node];
+        }
+
+        return [];
     }
 
     public override string Display {
