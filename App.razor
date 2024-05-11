@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager NavigationManager
+@using System.Reflection
 <div class="document-content">
     <div>
         <div id="errors">@Errors</div>
@@ -14,7 +15,14 @@
 </div>
 
 <div id="footer">
-    <a href="https://github.com/vcsjones/web-asn" target="_blank">GitHub</a> @System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription
+    <a href="https://github.com/vcsjones/web-asn" target="_blank">GitHub</a>
+    <span id="info">
+        <a>?</a>
+        <span>
+            @System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription
+            @(typeof(App).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion)
+        </span>
+    </span>
 </div>
 
 @code {

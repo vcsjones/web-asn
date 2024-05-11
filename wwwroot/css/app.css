@@ -138,3 +138,15 @@ button {
     right: 15pt;
     font-family: monospace;
 }
+
+#info {
+    padding: 5pt;
+}
+
+#info a + span {
+    display: none;
+}
+
+#info a:hover + span, #info a + span:hover {
+    display: inline;
+}
