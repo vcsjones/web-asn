@@ -15,20 +15,64 @@
 </div>
 
 <div id="footer">
-    <a href="https://github.com/vcsjones/web-asn" target="_blank">GitHub</a>
-    <span id="info">
-        <a>?</a>
-        <span>
-            @System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription
-            @(typeof(App).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion)
-        </span>
-    </span>
+    <div class="round-button" @onclick="()=> ShowHelp = true">
+        <a>
+            <span>?</span>
+        </a>
+    </div>
 </div>
+
+@if (ShowHelp) {
+    <div id="help">
+        <div id="help-container">
+            <span id="close-help" class="round-button" @onclick="()=> ShowHelp = false">
+                <a>
+                    <span>&times;</span>
+                </a>
+            </span>
+            <div id="help-content">
+                <h1>Basics</h1>
+                <p>
+                    This is a simple web assembly application that takes ASN.1 encoded content and displays the content
+                    as a tree. The content can be a string of hex-encoded bytes, or base-64. PEM encoded base-64 will work,
+                    too. The ASN.1 content supports BER, and by extension CER and DER.
+                </p>
+                <p>
+                    Because the decoding is all happening in your browser, none of the content is sent to the server.
+                </p>
+                <h1>Display</h1>
+                <p>
+                    Each node in the tree represents an item in the ASN.1 content. Deeper nesting of the content indicates
+                    sub-items, such as those contained in a SEQUENCE.
+                </p>
+                <ul>
+                    <li><span class="node-standard">Standard</span> indicates a regular node in the tree.</li>
+                    <li>
+                        <span class="node-synthetic">Synthethic</span> indicates the node was sythetically decoded. This occurs
+                        when the ASN.1 item does not exist as a true item, but rather as ASN.1 encoded data in an OCTET STRING
+                        or BIT STRING. If inner content of either of those two kinds of nodes appears to be well-formed ASN.1,
+                        its contents will be decoded and shown as synthetic nodes.
+                    </li>
+                    <li>Node names surrounded by square brackets, like [0] represent a content-specific ASN.1 tag.</li>
+                    <li>Node names surrounded by curly braces, like {0} represent an application ASN.1 tag.</li>
+                </ul>
+
+                <h1>About</h1>
+                <p>
+                    @System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription
+                    @(typeof(App).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion)
+                </p>
+                <p><a href="https://github.com/vcsjones/web-asn" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
     private string Contents { get; set; } = @"0C0C48656C6C6F20576F726C6421";
     private AsnNode? RootNode { get; set; }
     private string? Errors { get; set; }
+    private bool ShowHelp { get; set; }
 
     protected override void OnInitialized() {
         Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
