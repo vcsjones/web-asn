@@ -23,7 +23,7 @@
 </div>
 
 @if (ShowHelp) {
-    <div id="help">
+    <div id="help" @onclick="()=> ShowHelp = false">
         <div id="help-container">
             <span id="close-help" class="round-button" @onclick="()=> ShowHelp = false">
                 <a>
