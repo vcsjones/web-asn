@@ -9,6 +9,7 @@
         <div class="node">
             <div
                 @onclick="@(hasChildren ? Toggle : null!)"
+                title="@(Node.Synthetic ? "Node was synthetically decoded from parent node's contents." : "")"
                 class="node-name @(HideChildren ? "node-collapsed" : "") @(Node.Synthetic ? "node-synthetic" : "node-standard") @(hasChildren ? "node-parent" : "")">
                 @Node.Name
             </div>

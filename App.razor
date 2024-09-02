@@ -24,7 +24,7 @@
 
 @if (ShowHelp) {
     <div id="help" @onclick="()=> ShowHelp = false">
-        <div id="help-container">
+        <div id="help-container" @onclick:stopPropagation="true">
             <span id="close-help" class="round-button" @onclick="()=> ShowHelp = false">
                 <a>
                     <span>&times;</span>
