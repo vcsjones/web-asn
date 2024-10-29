@@ -16,10 +16,10 @@ public partial class AsnNode {
     public virtual string Name => Tag.ToString();
     public bool Synthetic => Context.Synthetic;
 
-    public virtual List<(string Name, string Value)> GetAdorningAttributes() {
-        List<(string Name, string Value)> attributes = new() {
+    public virtual List<(string Name, string? Value)> GetAdorningAttributes() {
+        List<(string Name, string? Value)> attributes = [
             ("Length", Raw.Length.ToString())
-        };
+        ];
 
         if (Context.BaseDocument.Span.Overlaps(Raw.Span, out int offset)) {
             attributes.Add(("Offset", offset.ToString()));

@@ -20,10 +20,12 @@
             </div>
             <div class="node-display">@Node.Display</div>
             <div class="node-adornments">
-                @foreach ((string Name, string Value) in Node.GetAdorningAttributes()) {
+                @foreach ((string Name, string? Value) in Node.GetAdorningAttributes()) {
                     <div class="node-adornment">
-                        <span class="node-adornment-name">@Name</span>:
-                        <span class="node-adornment-value">@Value</span>
+                        <span class="node-adornment-name">@Name</span>
+                        @if (Value is not null) {
+                            <span>: </span><span class="node-adornment-value">@Value</span>
+                        }
                     </div>
                 }
             </div>

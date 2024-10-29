@@ -24,7 +24,7 @@ public sealed class GeneralizedTimeAsnNode : AsnNode {
         _stringValue = System.Text.Encoding.ASCII.GetString(bytes.Span);
     }
 
-    public override List<(string Name, string Value)> GetAdorningAttributes()
+    public override List<(string Name, string? Value)> GetAdorningAttributes()
     {
         var attributes = base.GetAdorningAttributes();
         attributes.Add(("Value", _stringValue));

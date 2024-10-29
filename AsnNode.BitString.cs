@@ -22,7 +22,7 @@ public sealed class PrimitiveBitStringAsnNode : AsnNode {
         _value = reader.ReadBitString(out _unusedBits, tag);
     }
 
-    public override List<(string Name, string Value)> GetAdorningAttributes() {
+    public override List<(string Name, string? Value)> GetAdorningAttributes() {
         var attributes = base.GetAdorningAttributes();
         attributes.Add(("Bits", (_value.Length * 8 - _unusedBits).ToString()));
         return attributes;

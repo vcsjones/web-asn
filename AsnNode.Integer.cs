@@ -22,7 +22,7 @@ public sealed class IntegerAsnNode : AsnNode {
 
     public override string Display => _value.ToString("R");
 
-    public override List<(string Name, string Value)> GetAdorningAttributes() {
+    public override List<(string Name, string? Value)> GetAdorningAttributes() {
         var attributes = base.GetAdorningAttributes();
 
         // If the integer is sufficiently big, print it in hex as well. In that case
