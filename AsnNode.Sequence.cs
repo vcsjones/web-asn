@@ -24,5 +24,13 @@ public sealed class SequenceAsnNode : AsnNode {
         return walker.Walk();
     }
 
+    public override List<(string Name, string? Value)> GetAdorningAttributes() {
+        var attributes = base.GetAdorningAttributes();
+        AsnWalker walker = new(Context, _sequence.Clone());
+        int count = walker.Walk().Count();
+        attributes.Add(("Items", count.ToString()));
+        return attributes;
+    }
+
     public override string Name => "Sequence";
 }
