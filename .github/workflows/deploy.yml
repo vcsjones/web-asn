@@ -14,6 +14,9 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-24.04-arm
+    permissions:
+      id-token: write
+      contents: read
     environment: live
     steps:
     - name: Checkout
@@ -27,13 +30,13 @@ jobs:
     - name: Tailscale
       uses: tailscale/github-action@v3
       with:
-        oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-        oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+        openid-connect: true
+        client-id: ${{ secrets.TS_OIDC_CLIENT_ID }}
         tags: tag:ci
     - name: Copy To Production
       run: |
         mkdir -p ~/.ssh
-        echo "vcsjones2024-dev ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKK5Bi4tOamAsNJpQpmk3bBwDN0hEB8dHTaeOdtJN6OU" >> ~/.ssh/known_hosts
-        rsync -a --delete bin/publish/wwwroot/ deployer@vcsjones2024-dev:/var/wwwroot/asn.vcsjones.dev
-        rsync --ignore-times _server/asn.vcsjones.dev.Caddyfile deployer@vcsjones2024-dev:/etc/caddy/caddy.d/asn.vcsjones.dev.Caddyfile
-        ssh deployer@vcsjones2024-dev 'sudo systemctl reload caddy.service'
+        echo "vcsjones-dev ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKK5Bi4tOamAsNJpQpmk3bBwDN0hEB8dHTaeOdtJN6OU" >> ~/.ssh/known_hosts
+        rsync -a --delete bin/publish/wwwroot/ deployer@vcsjones-dev:/var/wwwroot/asn.vcsjones.dev
+        rsync --ignore-times _server/asn.vcsjones.dev.Caddyfile deployer@vcsjones-dev:/etc/caddy/caddy.d/asn.vcsjones.dev.Caddyfile
+        ssh deployer@vcsjones-dev 'sudo systemctl reload caddy.service'
