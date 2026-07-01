@@ -28,10 +28,10 @@ jobs:
     - name: Build
       run: dotnet workload restore && dotnet workload install wasm-tools && dotnet publish web-asn.csproj -c release --output bin/publish
     - name: Tailscale
-      uses: tailscale/github-action@v3
+      uses: tailscale/github-action@v4
       with:
-        openid-connect: true
-        client-id: ${{ secrets.TS_OIDC_CLIENT_ID }}
+        oauth-client-id: ${{ secrets.TS_OIDC_CLIENT_ID }}
+        audience: ${{ secrets.TS_OIDC_AUDIENCE }}
         tags: tag:ci
     - name: Copy To Production
       run: |
