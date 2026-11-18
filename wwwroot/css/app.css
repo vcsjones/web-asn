@@ -1,4 +1,10 @@
 @media (prefers-color-scheme: dark) {
+    :root {
+        --indent-l1-color: #ff7b72;
+        --indent-l2-color: #7ee787;
+        --indent-l3-color: #79c0ff;
+    }
+
     body {
         background-color: #111;
         color: #fdfdfd;
@@ -17,6 +23,12 @@
 }
 
 @media (prefers-color-scheme: light) {
+    :root {
+        --indent-l1-color: #cf222e;
+        --indent-l2-color: #1a7f37;
+        --indent-l3-color: #0969da;
+    }
+
     button {
         background-color: #DDD;
         border: 2px solid black;
@@ -47,9 +59,44 @@ button {
 }
 
 .node-shell {
+    --indent-color: #CCC;
     margin-left: 20pt;
-    padding-left: 2pt;
-    border-left: 1px solid #CCC;
+    position: relative;
+}
+
+.node-shell::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 100%;
+    bottom: 0;
+    width: 20pt;
+    background-color: color-mix(in srgb, var(--indent-color) 10%, transparent);
+    pointer-events: none;
+}
+
+.asn-tree > div > .node-shell {
+    margin-left: 0;
+}
+
+.asn-tree > div > .node-shell::before {
+    content: none;
+}
+
+.node-shell.l1 {
+    --indent-color: var(--indent-l1-color);
+}
+
+.node-shell.l2 {
+    --indent-color: var(--indent-l2-color);
+}
+
+.node-shell.l3 {
+    --indent-color: var(--indent-l3-color);
+}
+
+.node {
+    margin-left: 2pt;
 }
 
 .node-adornments {
